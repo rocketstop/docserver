@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class DocserviceApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void testContextLoads() {
 	}
 
 }
