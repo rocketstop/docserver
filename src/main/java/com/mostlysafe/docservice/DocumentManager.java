@@ -1,6 +1,7 @@
 package com.mostlysafe.docservice;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -19,17 +20,20 @@ public class DocumentManager {
         logger.debug("New Document Manager.");
     }
 
-    @Nullable
+    @Nonnull
     public Set<UUID> getKeys() {
-        return documents.keySet();
+        HashSet<UUID> keys = new HashSet<>(documents.keySet());
+        return keys;
     }
 
+    @Nonnull
     public UUID addDocument(@Nonnull final String content) {
         UUID newId = UUID.randomUUID();
         this.addDocument(newId, content);
         return newId;
     }
 
+    @Nonnull
     public UUID addDocument(@Nonnull final UUID key, @Nonnull final String content) {
         documents.put(key, content);
         return key;

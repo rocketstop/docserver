@@ -5,7 +5,6 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.Objects;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,10 +57,8 @@ public class DocumentManagerTest {
         UUID one = UUID.randomUUID();
 
         // make sure the random key doesn't match
-        if (Objects.nonNull(this.documentManager.getKeys())){
-            while (this.documentManager.getKeys().contains(one)) {
-                one = UUID.randomUUID();
-            }
+        while (this.documentManager.getKeys().contains(one)) {
+            one = UUID.randomUUID();
         }
 
         String actualContent = this.documentManager.getDocument(one);
@@ -86,10 +83,7 @@ public class DocumentManagerTest {
 
         assertThat(actualId, is(one));
 
-        if (Objects.nonNull(this.documentManager.getKeys())) {
-            assertThat(this.documentManager.getKeys().contains(one), is(false));
-        }
-
+        assertThat(this.documentManager.getKeys().contains(one), is(false));
     }
 
     @Test

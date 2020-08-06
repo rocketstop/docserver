@@ -1,13 +1,20 @@
 package com.mostlysafe.docservice;
 
+import java.net.URI;
+import java.util.Set;
+import java.util.UUID;
+import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Nonnull;
 
 @RestController
 @RequestMapping("/api/doc")
@@ -22,9 +29,66 @@ public class DocumentController {
     }
 
     @GetMapping()
-    public String index() {
-        logger.debug("index method called.");
-
-        return "index";
+    public ResponseEntity<Set<UUID>> getDocumentKeys() {
+        logger.debug("Fetching all document keys.");
+        return ResponseEntity.ok(manager.getKeys());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Document> getDocument(@PathVariable final UUID id) {
+        logger.debug("Fetching document with id: {}", id);
+        if (null == id) {
+            logger.debug("Message Not Processed: Missing ID");
+            return ResponseEntity.badRequest().build();
+        }
+
+        final String content = manager.getDocument(id);
+        logger.debug("manager returned content {}", content);
+        if (null == content) {
+            return ResponseEntity.notFound().build();
+        }
+
+        final Document document = new Document(id, content);
+        return ResponseEntity.ok(document);
+    }
+
+    @PostMapping()
+    public ResponseEntity<UUID> addDocument(@RequestBody final String content) {
+        logger.debug("Posting new document.");
+        if (null == content) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        UUID documentId = manager.addDocument(content);
+        URI uri = URI.create(documentId.toString());
+
+        return ResponseEntity.created(uri).build();
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<UUID> addDocument(@PathVariable final UUID id,
+                                            @RequestBody final String content) {
+        logger.debug("Posting new document.");
+        if (null == content) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        UUID documentId = manager.addDocument(id, content);
+        URI uri = URI.create(documentId.toString());
+
+        return ResponseEntity.created(uri).build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UUID> removeDocument(@PathVariable final UUID id) {
+        logger.debug("Removing document with id: {}", id);
+        if (null == id) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        UUID removedId = manager.removeDocument(id);
+
+        return ResponseEntity.accepted().build();
+    }
+
 }
