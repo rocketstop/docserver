@@ -4,10 +4,6 @@ bin/
 target/
 libs/
 tmp/
-node_modules/
-jaxws/jaxws-client/src/main/
-project/install4j/media
-
 
 # OS Files #
 .DS_Store
@@ -19,7 +15,6 @@ project/install4j/media
 *.war
 *.ear
 *.db
-rebel.xml
 
 # log files #
 *.log
@@ -117,14 +112,8 @@ derby.log
 out/
 
 ######################
-# PhantomJS
+# VS Code
 ######################
-phantomjsdriver.log
-
-######################
-# Auto generated files
-######################
-project/faces-config.NavData
 .vscode/*
 
 ######################
