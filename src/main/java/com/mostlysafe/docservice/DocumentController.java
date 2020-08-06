@@ -88,7 +88,9 @@ public class DocumentController {
 
         UUID removedId = manager.removeDocument(id);
 
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.accepted()
+                .header("location", removedId.toString())
+                .build();
     }
 
 }
