@@ -54,6 +54,10 @@ public class DocumentManager {
             return null;
         }
 
+        if (!documents.keySet().contains(key)) {
+            return null;
+        }
+
         documents.remove(key);
         return key;
     }

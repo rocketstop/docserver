@@ -87,6 +87,20 @@ public class DocumentManagerTest {
     }
 
     @Test
+    public void testRemoveDocument_noKey() {
+        UUID one = UUID.randomUUID();
+
+        // make sure it doesnt exist
+        while (this.documentManager.getKeys().contains(one)) {
+            one = UUID.randomUUID();
+        }
+
+        UUID actualId = this.documentManager.removeDocument(one);
+
+        assertThat(actualId, is(nullValue()));
+    }
+
+    @Test
     public void testRemoveDocument_nullKey() {
         UUID actualId = this.documentManager.removeDocument(null);
 
