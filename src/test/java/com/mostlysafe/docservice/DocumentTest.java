@@ -40,7 +40,7 @@ public class DocumentTest {
         UUID id = UUID.randomUUID();
         String content = "test content";
         Document one = new Document(id, content);
-        String expected = "Document{id="+id+" : "+ content+"}";
+        String expected = "Document{id="+id+" : content="+ content+"}";
 
         String output = one.toString();
 

@@ -8,7 +8,8 @@ public class Document {
     private final UUID id;
     private final String content;
 
-    public Document(@Nonnull final UUID id, @Nonnull final String content){
+    public Document(@Nonnull final UUID id,
+                    @Nonnull final String content){
         this.id = id;
         this.content = content;
     }
@@ -25,7 +26,7 @@ public class Document {
     public String toString() {
         return "Document{"
                 + "id=" + id
-                + " : " + content
+                + " : content=" + content
                 + '}';
     }
 

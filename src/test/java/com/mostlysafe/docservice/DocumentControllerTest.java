@@ -58,8 +58,9 @@ public class DocumentControllerTest {
 
     @Test
     public void testGetDocument() {
-        when(managerMock.getDocument(ID)).thenReturn(CONTENT);
+
         Document expectedDocument = new Document(ID, CONTENT);
+        when(managerMock.getDocument(ID)).thenReturn(expectedDocument);
 
         ResponseEntity<Document> response = controller.getDocument(ID);
 
@@ -97,9 +98,17 @@ public class DocumentControllerTest {
     }
 
     @Test
-    public void testAddDocument_nullContent() {
+    public void testAddDocument_nullContent_Document() {
 
-        ResponseEntity<UUID> response = controller.addDocument(null);
+        ResponseEntity<UUID> response = controller.addDocument((Document) null);
+
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+    }
+
+    @Test
+    public void testAddDocument_nullContent_String() {
+
+        ResponseEntity<UUID> response = controller.addDocument((String) null);
 
         assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }

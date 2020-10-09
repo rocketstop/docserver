@@ -45,11 +45,12 @@ public class DocumentManagerTest {
     public void testGetDocument() {
         UUID one = UUID.randomUUID();
         String testContent = "test document";
+        Document expectedDocument = new Document(one, testContent);
         this.documentManager.addDocument(one, testContent);
 
-        String actualContent = this.documentManager.getDocument(one);
+        Document actualDocument = this.documentManager.getDocument(one);
 
-        assertThat(actualContent, is(testContent));
+        assertThat(actualDocument, is(expectedDocument));
     }
 
     @Test
@@ -61,16 +62,16 @@ public class DocumentManagerTest {
             one = UUID.randomUUID();
         }
 
-        String actualContent = this.documentManager.getDocument(one);
+        Document actualDocument = this.documentManager.getDocument(one);
 
-        assertThat(actualContent, is(nullValue()));
+        assertThat(actualDocument, is(nullValue()));
     }
 
     @Test
     public void testGetDocument_nullKey() {
-        String actualContent = this.documentManager.getDocument(null);
+        Document actualDocument = this.documentManager.getDocument(null);
 
-        assertThat(actualContent, is(nullValue()));
+        assertThat(actualDocument, is(nullValue()));
     }
 
     @Test
