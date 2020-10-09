@@ -1,15 +1,19 @@
 package com.mostlysafe.docservice;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 import java.util.UUID;
 import javax.annotation.Nonnull;
+import org.springframework.hateoas.RepresentationModel;
 
-public class Document {
+public class Document extends RepresentationModel<Document> {
     private final UUID id;
     private final String content;
 
-    public Document(@Nonnull final UUID id,
-                    @Nonnull final String content){
+    @JsonCreator
+    public Document(@Nonnull @JsonProperty("id") final UUID id,
+                    @Nonnull @JsonProperty("content") final String content){
         this.id = id;
         this.content = content;
     }
