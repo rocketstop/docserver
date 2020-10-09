@@ -71,7 +71,6 @@ public class DocumentController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .location(uri)
                 .location(linkTo(methodOn(DocumentController.class).getDocument(documentId)).withSelfRel().toUri())
                 .body(document);
     }
@@ -91,7 +90,6 @@ public class DocumentController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .location(uri)
                 .location(linkTo(methodOn(DocumentController.class).getDocument(documentId)).withSelfRel().toUri())
                 .body(document);
     }
@@ -110,7 +108,6 @@ public class DocumentController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .location(uri)
                 .location(linkTo(methodOn(DocumentController.class).getDocument(documentId)).withSelfRel().toUri())
                 .body(document);
     }
@@ -126,7 +123,7 @@ public class DocumentController {
 
         return ResponseEntity
                 .accepted()
-                .location(URI.create(id.toString()))
+                .location(linkTo(methodOn(DocumentController.class).getDocument(removedId)).withSelfRel().toUri())
                 .build();
     }
 
