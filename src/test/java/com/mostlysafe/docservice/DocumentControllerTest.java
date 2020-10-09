@@ -98,6 +98,21 @@ public class DocumentControllerTest {
     }
 
     @Test
+    public void testAddDocument_asDocument() {
+        UUID newId = UUID.randomUUID();
+        String content = "some test content.";
+        when(managerMock.addDocument(any(UUID.class), any(String.class))).thenReturn(newId);
+
+        Document document = new Document(newId, content);
+        ResponseEntity<UUID> response = controller.addDocument(document);
+
+        assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
+        assertThat(response.getHeaders().get("location").stream().findFirst().get(),
+                   is(newId.toString()));
+
+    }
+
+    @Test
     public void testAddDocument_nullContent_Document() {
 
         ResponseEntity<UUID> response = controller.addDocument((Document) null);

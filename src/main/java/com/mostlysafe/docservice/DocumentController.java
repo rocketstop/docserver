@@ -64,7 +64,7 @@ public class DocumentController {
         return ResponseEntity.created(uri).build();
     }
 
-    @PostMapping()
+    @PostMapping("/create")
     public ResponseEntity<UUID> addDocument(@RequestBody final String contents) {
         logger.debug("Posting new document.");
         if (null == contents) {
