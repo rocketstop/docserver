@@ -38,32 +38,45 @@ public class DocumentController {
     public ResponseEntity<Document> getDocument(@PathVariable final UUID id) {
         logger.debug("Fetching document with id: {}", id);
         if (null == id) {
-            logger.debug("Message Not Processed: Missing ID");
+            logger.debug("Message Not Processed: No ID");
             return ResponseEntity.badRequest().build();
         }
 
-        final String content = manager.getDocument(id);
-        logger.debug("manager returned content {}", content);
-        if (null == content) {
+        final Document document = manager.getDocument(id);
+        logger.debug("manager returned content {}", document);
+        if (null == document) {
             return ResponseEntity.notFound().build();
         }
 
-        final Document document = new Document(id, content);
         return ResponseEntity.ok(document);
     }
 
     @PostMapping()
-    public ResponseEntity<UUID> addDocument(@RequestBody final String content) {
+    public ResponseEntity<UUID> addDocument(@RequestBody final Document document) {
         logger.debug("Posting new document.");
-        if (null == content) {
+        if (null == document) {
             return ResponseEntity.badRequest().build();
         }
 
-        UUID documentId = manager.addDocument(content);
+        UUID documentId = manager.addDocument(document.getId(), document.getContent());
         URI uri = URI.create(documentId.toString());
 
         return ResponseEntity.created(uri).build();
     }
+
+    @PostMapping("/create")
+    public ResponseEntity<UUID> addDocument(@RequestBody final String contents) {
+        logger.debug("Posting new document.");
+        if (null == contents) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        UUID documentId = manager.addDocument(contents);
+        URI uri = URI.create(documentId.toString());
+
+        return ResponseEntity.created(uri).build();
+    }
+
 
     @PostMapping("/{id}")
     public ResponseEntity<UUID> addDocument(@PathVariable final UUID id,

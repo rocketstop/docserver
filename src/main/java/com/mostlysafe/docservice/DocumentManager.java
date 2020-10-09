@@ -2,8 +2,10 @@ package com.mostlysafe.docservice;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.slf4j.Logger;
@@ -14,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class DocumentManager {
     static final Logger logger = LoggerFactory.getLogger(DocumentManager.class);
 
-    private final HashMap<UUID, String> documents = new HashMap<>();
+    private final Map<UUID, String> documents = new ConcurrentHashMap<>();
 
     public DocumentManager(){
         logger.debug("New Document Manager.");
@@ -22,8 +24,7 @@ public class DocumentManager {
 
     @Nonnull
     public Set<UUID> getKeys() {
-        HashSet<UUID> keys = new HashSet<>(documents.keySet());
-        return keys;
+        return documents.keySet();
     }
 
     @Nonnull
@@ -40,12 +41,16 @@ public class DocumentManager {
     }
 
     @Nullable
-    public String getDocument(@Nonnull final UUID key) {
+    public Document getDocument(@Nonnull final UUID key) {
         if (null == key) {
             return null;
         }
 
-        return documents.get(key);
+        if (!documents.keySet().contains(key)) {
+            return null;
+        }
+
+        return new Document(key, documents.get(key));
     }
 
     @Nullable
