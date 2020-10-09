@@ -28,7 +28,7 @@ public class DocumentController {
     private final DocumentManager manager;
 
     @Autowired
-    DocumentController(@Nonnull final DocumentManager manager){
+    DocumentController(@Nonnull final DocumentManager manager) {
         this.manager = manager;
     }
 
@@ -53,6 +53,7 @@ public class DocumentController {
             return ResponseEntity.notFound().build();
         }
         document.add(linkTo(methodOn(DocumentController.class).getDocument(document.getId())).withSelfRel());
+        document.add(linkTo(methodOn(DocumentController.class).getDocumentKeys()).withRel("all documents"));
 
         return ResponseEntity.ok(document);
     }
@@ -68,12 +69,16 @@ public class DocumentController {
         URI uri = URI.create(documentId.toString());
         document.add(linkTo(methodOn(DocumentController.class).getDocument(document.getId())).withSelfRel());
 
-        return ResponseEntity.status(HttpStatus.CREATED).location(uri).body(document);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .location(uri)
+                .location(linkTo(methodOn(DocumentController.class).getDocument(documentId)).withSelfRel().toUri())
+                .body(document);
     }
 
     @PostMapping("/{id}")
     public ResponseEntity<Document> addDocument(@PathVariable final UUID id,
-                                            @RequestBody final String content) {
+                                                @RequestBody final String content) {
         logger.debug("Posting new document.");
         if (null == content) {
             return ResponseEntity.badRequest().build();
@@ -84,20 +89,30 @@ public class DocumentController {
         Document document = new Document(id, content);
         document.add(linkTo(methodOn(DocumentController.class).getDocument(document.getId())).withSelfRel());
 
-        return ResponseEntity.status(HttpStatus.CREATED).location(uri).body(document);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .location(uri)
+                .location(linkTo(methodOn(DocumentController.class).getDocument(documentId)).withSelfRel().toUri())
+                .body(document);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Document> addDocument(@RequestBody final String contents) {
+    public ResponseEntity<Document> addDocument(@RequestBody final String content) {
         logger.debug("Posting new document.");
-        if (null == contents) {
+        if (null == content) {
             return ResponseEntity.badRequest().build();
         }
 
-        UUID documentId = manager.addDocument(contents);
+        UUID documentId = manager.addDocument(content);
         URI uri = URI.create(documentId.toString());
+        Document document = new Document(documentId, content);
+        document.add(linkTo(methodOn(DocumentController.class).getDocument(document.getId())).withSelfRel());
 
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .location(uri)
+                .location(linkTo(methodOn(DocumentController.class).getDocument(documentId)).withSelfRel().toUri())
+                .body(document);
     }
 
     @DeleteMapping("/{id}")
@@ -109,8 +124,9 @@ public class DocumentController {
 
         UUID removedId = manager.removeDocument(id);
 
-        return ResponseEntity.accepted()
-                .header("location", removedId.toString())
+        return ResponseEntity
+                .accepted()
+                .location(URI.create(id.toString()))
                 .build();
     }
 
