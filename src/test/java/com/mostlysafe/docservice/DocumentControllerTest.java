@@ -17,9 +17,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 @ExtendWith(MockitoExtension.class)
 public class DocumentControllerTest {
+
+    private static final String CONTROLLER_MAPPING = "/api/doc/";
 
     private static final UUID ID = UUID.randomUUID();
     private static final String CONTENT = "test content";
@@ -94,7 +97,7 @@ public class DocumentControllerTest {
 
         assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
         assertThat(response.getHeaders().get("location").stream().findFirst().get(),
-                   is(newId.toString()));
+                   is(CONTROLLER_MAPPING + newId.toString()));
     }
 
     @Test
@@ -116,7 +119,7 @@ public class DocumentControllerTest {
 
         assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
         assertThat(response.getHeaders().get("location").stream().findFirst().get(),
-                   is(newId.toString()));
+                   is(CONTROLLER_MAPPING + newId.toString()));
 
     }
 
@@ -137,7 +140,7 @@ public class DocumentControllerTest {
 
         assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
         assertThat(response.getHeaders().get("location").stream().findFirst().get(),
-                   is(newId.toString()));
+                   is(CONTROLLER_MAPPING + newId.toString()));
     }
 
     @Test
