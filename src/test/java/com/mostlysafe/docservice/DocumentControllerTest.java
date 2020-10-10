@@ -17,9 +17,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 @ExtendWith(MockitoExtension.class)
 public class DocumentControllerTest {
+
+    private static final String CONTROLLER_MAPPING = "/api/doc/";
 
     private static final UUID ID = UUID.randomUUID();
     private static final String CONTENT = "test content";
@@ -90,11 +93,19 @@ public class DocumentControllerTest {
         UUID newId = UUID.randomUUID();
         when(managerMock.addDocument(any(String.class))).thenReturn(newId);
 
-        ResponseEntity<UUID> response = controller.addDocument("some content");
+        ResponseEntity<Document> response = controller.addDocument("some content");
 
         assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
         assertThat(response.getHeaders().get("location").stream().findFirst().get(),
-                   is(newId.toString()));
+                   is(CONTROLLER_MAPPING + newId.toString()));
+    }
+
+    @Test
+    public void testAddDocument_nullContent_String() {
+
+        ResponseEntity<Document> response = controller.addDocument((String) null);
+
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
     @Test
@@ -104,26 +115,18 @@ public class DocumentControllerTest {
         when(managerMock.addDocument(any(UUID.class), any(String.class))).thenReturn(newId);
 
         Document document = new Document(newId, content);
-        ResponseEntity<UUID> response = controller.addDocument(document);
+        ResponseEntity<Document> response = controller.addDocument(document);
 
         assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
         assertThat(response.getHeaders().get("location").stream().findFirst().get(),
-                   is(newId.toString()));
+                   is(CONTROLLER_MAPPING + newId.toString()));
 
     }
 
     @Test
     public void testAddDocument_nullContent_Document() {
 
-        ResponseEntity<UUID> response = controller.addDocument((Document) null);
-
-        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
-    }
-
-    @Test
-    public void testAddDocument_nullContent_String() {
-
-        ResponseEntity<UUID> response = controller.addDocument((String) null);
+        ResponseEntity<Document> response = controller.addDocument((Document) null);
 
         assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
@@ -133,18 +136,18 @@ public class DocumentControllerTest {
         UUID newId = UUID.randomUUID();
         when(managerMock.addDocument(any(UUID.class), any(String.class))).thenReturn(newId);
 
-        ResponseEntity<UUID> response = controller.addDocument(newId,"some content");
+        ResponseEntity<Document> response = controller.addDocument(newId,"some content");
 
         assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
         assertThat(response.getHeaders().get("location").stream().findFirst().get(),
-                   is(newId.toString()));
+                   is(CONTROLLER_MAPPING + newId.toString()));
     }
 
     @Test
     public void testAddDocument_withIdNullContent() {
         UUID newId = UUID.randomUUID();
 
-        ResponseEntity<UUID> response = controller.addDocument(newId,null);
+        ResponseEntity<Document> response = controller.addDocument(newId,null);
 
         assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }

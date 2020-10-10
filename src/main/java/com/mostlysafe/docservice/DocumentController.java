@@ -1,5 +1,8 @@
 package com.mostlysafe.docservice;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.net.URI;
 import java.util.Set;
 import java.util.UUID;
@@ -7,6 +10,7 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +28,7 @@ public class DocumentController {
     private final DocumentManager manager;
 
     @Autowired
-    DocumentController(@Nonnull final DocumentManager manager){
+    DocumentController(@Nonnull final DocumentManager manager) {
         this.manager = manager;
     }
 
@@ -43,16 +47,19 @@ public class DocumentController {
         }
 
         final Document document = manager.getDocument(id);
+
         logger.debug("manager returned content {}", document);
         if (null == document) {
             return ResponseEntity.notFound().build();
         }
+        document.add(linkTo(methodOn(DocumentController.class).getDocument(document.getId())).withSelfRel());
+        document.add(linkTo(methodOn(DocumentController.class).getDocumentKeys()).withRel("all documents"));
 
         return ResponseEntity.ok(document);
     }
 
     @PostMapping()
-    public ResponseEntity<UUID> addDocument(@RequestBody final Document document) {
+    public ResponseEntity<Document> addDocument(@RequestBody final Document document) {
         logger.debug("Posting new document.");
         if (null == document) {
             return ResponseEntity.badRequest().build();
@@ -60,27 +67,17 @@ public class DocumentController {
 
         UUID documentId = manager.addDocument(document.getId(), document.getContent());
         URI uri = URI.create(documentId.toString());
+        document.add(linkTo(methodOn(DocumentController.class).getDocument(document.getId())).withSelfRel());
 
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .location(linkTo(methodOn(DocumentController.class).getDocument(documentId)).withSelfRel().toUri())
+                .body(document);
     }
-
-    @PostMapping("/create")
-    public ResponseEntity<UUID> addDocument(@RequestBody final String contents) {
-        logger.debug("Posting new document.");
-        if (null == contents) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        UUID documentId = manager.addDocument(contents);
-        URI uri = URI.create(documentId.toString());
-
-        return ResponseEntity.created(uri).build();
-    }
-
 
     @PostMapping("/{id}")
-    public ResponseEntity<UUID> addDocument(@PathVariable final UUID id,
-                                            @RequestBody final String content) {
+    public ResponseEntity<Document> addDocument(@PathVariable final UUID id,
+                                                @RequestBody final String content) {
         logger.debug("Posting new document.");
         if (null == content) {
             return ResponseEntity.badRequest().build();
@@ -88,8 +85,31 @@ public class DocumentController {
 
         UUID documentId = manager.addDocument(id, content);
         URI uri = URI.create(documentId.toString());
+        Document document = new Document(id, content);
+        document.add(linkTo(methodOn(DocumentController.class).getDocument(document.getId())).withSelfRel());
 
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .location(linkTo(methodOn(DocumentController.class).getDocument(documentId)).withSelfRel().toUri())
+                .body(document);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Document> addDocument(@RequestBody final String content) {
+        logger.debug("Posting new document.");
+        if (null == content) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        UUID documentId = manager.addDocument(content);
+        URI uri = URI.create(documentId.toString());
+        Document document = new Document(documentId, content);
+        document.add(linkTo(methodOn(DocumentController.class).getDocument(document.getId())).withSelfRel());
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .location(linkTo(methodOn(DocumentController.class).getDocument(documentId)).withSelfRel().toUri())
+                .body(document);
     }
 
     @DeleteMapping("/{id}")
@@ -101,8 +121,9 @@ public class DocumentController {
 
         UUID removedId = manager.removeDocument(id);
 
-        return ResponseEntity.accepted()
-                .header("location", removedId.toString())
+        return ResponseEntity
+                .accepted()
+                .location(linkTo(methodOn(DocumentController.class).getDocument(removedId)).withSelfRel().toUri())
                 .build();
     }
 
