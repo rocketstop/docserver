@@ -5,9 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 import java.util.UUID;
 import javax.annotation.Nonnull;
+import org.springframework.data.annotation.Id;
 import org.springframework.hateoas.RepresentationModel;
 
+@org.springframework.data.mongodb.core.mapping.Document
 public class Document extends RepresentationModel<Document> {
+
+    @Id
     private final UUID id;
     private final String content;
 
