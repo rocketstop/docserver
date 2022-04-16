@@ -25,10 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class DocumentController {
     static final Logger logger = LoggerFactory.getLogger(DocumentController.class);
 
-    private final DocumentManager manager;
+    private final DocumentManagerInternal manager;
 
     @Autowired
-    DocumentController(@Nonnull final DocumentManager manager) {
+    DocumentController(@Nonnull final DocumentManagerInternal manager) {
         this.manager = manager;
     }
 

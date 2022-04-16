@@ -17,7 +17,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
 
 @ExtendWith(MockitoExtension.class)
 public class DocumentControllerTest {
@@ -28,7 +27,7 @@ public class DocumentControllerTest {
     private static final String CONTENT = "test content";
 
     @Mock
-    DocumentManager managerMock;
+    DocumentManagerInternal managerMock;
 
     private DocumentController controller;
     private final HashMap<UUID, String> documents = new HashMap<>();

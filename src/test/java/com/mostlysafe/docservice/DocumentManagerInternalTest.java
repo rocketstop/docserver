@@ -9,20 +9,20 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class DocumentManagerTest {
+public class DocumentManagerInternalTest {
 
-    DocumentManager documentManager;
+    DocumentManagerInternal documentManagerInternal;
 
     @BeforeEach
     public void setup(){
-        this.documentManager = new DocumentManager();
-        this.documentManager.addDocument(UUID.randomUUID(), "some other document");
-        this.documentManager.addDocument(UUID.randomUUID(), "another document");
+        this.documentManagerInternal = new DocumentManagerInternal();
+        this.documentManagerInternal.addDocument(UUID.randomUUID(), "some other document");
+        this.documentManagerInternal.addDocument(UUID.randomUUID(), "another document");
     }
 
     @Test
     public void testAddDocument() {
-        DocumentManager manager = new DocumentManager();
+        DocumentManagerInternal manager = new DocumentManagerInternal();
 
         UUID id = UUID.randomUUID();
         String content = "some new content";
@@ -33,7 +33,7 @@ public class DocumentManagerTest {
 
     @Test
     public void testAddDocument_contentOnly() {
-        DocumentManager manager = new DocumentManager();
+        DocumentManagerInternal manager = new DocumentManagerInternal();
 
         String content = "some new content";
         UUID actualId = manager.addDocument(content);
@@ -46,9 +46,9 @@ public class DocumentManagerTest {
         UUID one = UUID.randomUUID();
         String testContent = "test document";
         Document expectedDocument = new Document(one, testContent);
-        this.documentManager.addDocument(one, testContent);
+        this.documentManagerInternal.addDocument(one, testContent);
 
-        Document actualDocument = this.documentManager.getDocument(one);
+        Document actualDocument = this.documentManagerInternal.getDocument(one);
 
         assertThat(actualDocument, is(expectedDocument));
     }
@@ -58,18 +58,18 @@ public class DocumentManagerTest {
         UUID one = UUID.randomUUID();
 
         // make sure the random key doesn't match
-        while (this.documentManager.getKeys().contains(one)) {
+        while (this.documentManagerInternal.getKeys().contains(one)) {
             one = UUID.randomUUID();
         }
 
-        Document actualDocument = this.documentManager.getDocument(one);
+        Document actualDocument = this.documentManagerInternal.getDocument(one);
 
         assertThat(actualDocument, is(nullValue()));
     }
 
     @Test
     public void testGetDocument_nullKey() {
-        Document actualDocument = this.documentManager.getDocument(null);
+        Document actualDocument = this.documentManagerInternal.getDocument(null);
 
         assertThat(actualDocument, is(nullValue()));
     }
@@ -78,13 +78,13 @@ public class DocumentManagerTest {
     public void testRemoveDocument() {
         UUID one = UUID.randomUUID();
         String testContent = "test document";
-        this.documentManager.addDocument(one, testContent);
+        this.documentManagerInternal.addDocument(one, testContent);
 
-        UUID actualId = this.documentManager.removeDocument(one);
+        UUID actualId = this.documentManagerInternal.removeDocument(one);
 
         assertThat(actualId, is(one));
 
-        assertThat(this.documentManager.getKeys().contains(one), is(false));
+        assertThat(this.documentManagerInternal.getKeys().contains(one), is(false));
     }
 
     @Test
@@ -92,18 +92,18 @@ public class DocumentManagerTest {
         UUID one = UUID.randomUUID();
 
         // make sure it doesnt exist
-        while (this.documentManager.getKeys().contains(one)) {
+        while (this.documentManagerInternal.getKeys().contains(one)) {
             one = UUID.randomUUID();
         }
 
-        UUID actualId = this.documentManager.removeDocument(one);
+        UUID actualId = this.documentManagerInternal.removeDocument(one);
 
         assertThat(actualId, is(nullValue()));
     }
 
     @Test
     public void testRemoveDocument_nullKey() {
-        UUID actualId = this.documentManager.removeDocument(null);
+        UUID actualId = this.documentManagerInternal.removeDocument(null);
 
         assertThat(actualId, is(nullValue()));
     }
