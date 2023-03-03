@@ -1,4 +1,4 @@
-package com.mostlysafe.docservice;
+package com.mostlysafe.docservice.backend.internal;
 
 import java.util.Map;
 import java.util.Set;
@@ -6,6 +6,9 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.mostlysafe.docservice.DocumentManager;
+import com.mostlysafe.docservice.model.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -49,7 +52,7 @@ public class DocumentManagerInternal implements DocumentManager {
             return null;
         }
 
-        if (!documents.keySet().contains(key)) {
+        if (!documents.containsKey(key)) {
             return null;
         }
 
@@ -63,7 +66,7 @@ public class DocumentManagerInternal implements DocumentManager {
             return null;
         }
 
-        if (!documents.keySet().contains(key)) {
+        if (!documents.containsKey(key)) {
             return null;
         }
 

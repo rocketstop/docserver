@@ -3,10 +3,12 @@ package com.mostlysafe.docservice;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.net.URI;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
+
+import com.mostlysafe.docservice.backend.internal.DocumentManagerInternal;
+import com.mostlysafe.docservice.model.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +68,7 @@ public class DocumentController {
         }
 
         UUID documentId = manager.addDocument(document.getId(), document.getContent());
-        URI uri = URI.create(documentId.toString());
+
         document.add(linkTo(methodOn(DocumentController.class).getDocument(document.getId())).withSelfRel());
 
         return ResponseEntity
@@ -84,7 +86,7 @@ public class DocumentController {
         }
 
         UUID documentId = manager.addDocument(id, content);
-        URI uri = URI.create(documentId.toString());
+
         Document document = new Document(id, content);
         document.add(linkTo(methodOn(DocumentController.class).getDocument(document.getId())).withSelfRel());
 
@@ -102,7 +104,7 @@ public class DocumentController {
         }
 
         UUID documentId = manager.addDocument(content);
-        URI uri = URI.create(documentId.toString());
+
         Document document = new Document(documentId, content);
         document.add(linkTo(methodOn(DocumentController.class).getDocument(document.getId())).withSelfRel());
 

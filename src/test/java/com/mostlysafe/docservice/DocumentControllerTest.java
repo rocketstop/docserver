@@ -8,6 +8,9 @@ import static org.mockito.Mockito.when;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
+
+import com.mostlysafe.docservice.backend.internal.DocumentManagerInternal;
+import com.mostlysafe.docservice.model.Document;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

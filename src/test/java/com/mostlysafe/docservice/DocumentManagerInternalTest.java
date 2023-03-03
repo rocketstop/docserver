@@ -6,6 +6,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.UUID;
+
+import com.mostlysafe.docservice.backend.internal.DocumentManagerInternal;
+import com.mostlysafe.docservice.model.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,6 @@
-package com.mostlysafe.docservice.mongo;
+package com.mostlysafe.docservice.backend.mongo;
 
-import com.mostlysafe.docservice.Document;
+import com.mostlysafe.docservice.model.Document;
 import com.mostlysafe.docservice.DocumentManager;
 import java.util.Set;
 import java.util.UUID;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class DocumentManagerMongo implements DocumentManager {
     static final Logger logger = LoggerFactory.getLogger(DocumentManagerMongo.class);
 
-    private DocumentRepository documentRepository;
+    private final DocumentRepository documentRepository;
 
     @Autowired
     public DocumentManagerMongo(DocumentRepository documentRepository) {
@@ -25,19 +25,19 @@ public class DocumentManagerMongo implements DocumentManager {
     @Nonnull
     @Override
     public Set<UUID> getKeys() {
-        return null;
+        return Set.of();
     }
 
     @Nonnull
     @Override
     public UUID addDocument(@Nonnull final String content) {
-        return null;
+        return UUID.randomUUID();
     }
 
     @Nonnull
     @Override
     public UUID addDocument(@Nonnull final UUID key, @Nonnull final String content) {
-        return null;
+        return UUID.randomUUID();
     }
 
     @Nullable
@@ -49,6 +49,6 @@ public class DocumentManagerMongo implements DocumentManager {
     @Nullable
     @Override
     public UUID removeDocument(@Nonnull final UUID key) {
-        return null;
+        return UUID.randomUUID();
     }
 }

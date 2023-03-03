@@ -1,5 +1,7 @@
 package com.mostlysafe.docservice;
 
+import com.mostlysafe.docservice.model.Document;
+
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
