@@ -2,6 +2,8 @@ package com.mostlysafe.docservice.backend.mongo;
 
 import com.mostlysafe.docservice.model.Document;
 import com.mostlysafe.docservice.DocumentManager;
+
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -26,6 +28,12 @@ public class DocumentManagerMongo implements DocumentManager {
     @Override
     public Set<UUID> getKeys() {
         return Set.of();
+    }
+
+    @Nonnull
+    @Override
+    public List<Document> getAllDocuments() {
+        return documentRepository.getAll();
     }
 
     @Nonnull

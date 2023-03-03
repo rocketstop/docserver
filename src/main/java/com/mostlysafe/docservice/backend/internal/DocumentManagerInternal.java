@@ -1,8 +1,6 @@
 package com.mostlysafe.docservice.backend.internal;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,6 +26,19 @@ public class DocumentManagerInternal implements DocumentManager {
     @Nonnull
     public Set<UUID> getKeys() {
         return documents.keySet();
+    }
+
+    @Override
+    @Nonnull
+    public List<Document> getAllDocuments() {
+        List<Document> documentsList = new ArrayList<>();
+
+        documents.entrySet().forEach(
+                e -> documentsList.add(new Document(e.getKey(), e.getValue()))
+        );
+        // TODO better way?
+
+        return documentsList;
     }
 
     @Override

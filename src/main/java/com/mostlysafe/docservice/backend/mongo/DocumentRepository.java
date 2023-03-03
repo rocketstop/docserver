@@ -9,4 +9,6 @@ public interface DocumentRepository extends MongoRepository<Document, UUID> {
 
     List<Document> findByContent(String content);
 
+    List<Document> getAll();
+
 }

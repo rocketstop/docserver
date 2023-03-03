@@ -3,6 +3,7 @@ package com.mostlysafe.docservice;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -35,6 +36,12 @@ public class DocumentController {
     }
 
     @GetMapping()
+    public ResponseEntity<List<Document>> getAllDocuments() {
+        logger.debug("Fetching all documents.");
+        return ResponseEntity.ok(manager.getAllDocuments());
+    }
+
+    @GetMapping("/keys")
     public ResponseEntity<Set<UUID>> getDocumentKeys() {
         logger.debug("Fetching all document keys.");
         return ResponseEntity.ok(manager.getKeys());
@@ -55,7 +62,8 @@ public class DocumentController {
             return ResponseEntity.notFound().build();
         }
         document.add(linkTo(methodOn(DocumentController.class).getDocument(document.getId())).withSelfRel());
-        document.add(linkTo(methodOn(DocumentController.class).getDocumentKeys()).withRel("all documents"));
+        document.add(linkTo(methodOn(DocumentController.class).getAllDocuments()).withRel("all documents"));
+        document.add(linkTo(methodOn(DocumentController.class).getDocumentKeys()).withRel("all keys"));
 
         return ResponseEntity.ok(document);
     }
