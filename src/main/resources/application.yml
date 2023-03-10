@@ -1,4 +1,16 @@
-logging
-  level
-    root=INFO
-    com.mostlysafe=DEBUG
+spring:
+  application:
+    name: docservice
+logging:
+  level:
+    root: INFO
+    com.mostlysafe: DEBUG
+
+server:
+  port: 8080
+
+database:
+  name: documents
+  url: mongodb://lettuce:27017/documents
+
+management.endpoints.web.exposure.include: '*'
