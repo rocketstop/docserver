@@ -5,6 +5,8 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 
+import org.bson.UuidRepresentation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +25,7 @@ public class DocserviceConfiguration extends AbstractMongoClientConfiguration {
 
     private static final String DEFAULT_MONGODB_URL = "mongodb://localhost:27017/documents";
 
+    @Autowired
     private Environment environment;
     protected Logger logger;
 
@@ -46,6 +49,7 @@ public class DocserviceConfiguration extends AbstractMongoClientConfiguration {
         ConnectionString connectionString = new ConnectionString(databaseUrl);
         MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
+                .uuidRepresentation(UuidRepresentation.STANDARD)
                 .build();
 
         return MongoClients.create(mongoClientSettings);

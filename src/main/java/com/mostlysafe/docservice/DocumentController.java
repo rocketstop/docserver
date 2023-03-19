@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-import com.mostlysafe.docservice.backend.internal.DocumentManagerInternal;
 import com.mostlysafe.docservice.model.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -11,7 +11,9 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DocumentManagerMongo implements DocumentManager {
     static final Logger logger = LoggerFactory.getLogger(DocumentManagerMongo.class);
 
@@ -33,19 +35,20 @@ public class DocumentManagerMongo implements DocumentManager {
     @Nonnull
     @Override
     public List<Document> getAllDocuments() {
-        return documentRepository.getAll();
+        return documentRepository.findAll();
     }
 
     @Nonnull
     @Override
     public UUID addDocument(@Nonnull final String content) {
-        return UUID.randomUUID();
+        return this.addDocument(UUID.randomUUID(), content);
     }
 
     @Nonnull
     @Override
     public UUID addDocument(@Nonnull final UUID key, @Nonnull final String content) {
-        return UUID.randomUUID();
+        documentRepository.save(new Document(key, content));
+        return key;
     }
 
     @Nullable
@@ -57,6 +60,8 @@ public class DocumentManagerMongo implements DocumentManager {
     @Nullable
     @Override
     public UUID removeDocument(@Nonnull final UUID key) {
-        return UUID.randomUUID();
+
+        documentRepository.deleteById(key);
+        return key;
     }
 }

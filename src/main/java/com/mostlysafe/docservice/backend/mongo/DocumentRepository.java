@@ -7,8 +7,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface DocumentRepository extends MongoRepository<Document, UUID> {
 
-    List<Document> findByContent(String content);
+    public List<Document> findByContent(String content);
 
-    List<Document> getAll();
+    public Document findById(String id);
 
 }
