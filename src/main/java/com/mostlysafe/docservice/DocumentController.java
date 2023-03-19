@@ -71,6 +71,9 @@ public class DocumentController {
             return ResponseEntity.badRequest().build();
         }
 
+        if (null == document.getId()){
+            document.setId(UUID.randomUUID());
+        }
         UUID documentId = manager.addDocument(document);
 
         return ResponseEntity

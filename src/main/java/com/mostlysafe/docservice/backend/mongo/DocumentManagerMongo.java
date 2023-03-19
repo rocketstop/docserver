@@ -6,6 +6,7 @@ import com.mostlysafe.docservice.DocumentManager;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ public class DocumentManagerMongo implements DocumentManager {
     @Nonnull
     @Override
     public Set<UUID> getKeys() {
-        return Set.of();
+        return documentRepository.findAll().stream().map(Document::getId).collect(Collectors.toSet());
     }
 
     @Nonnull
