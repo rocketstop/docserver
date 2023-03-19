@@ -50,7 +50,7 @@ public class DocumentController {
     public ResponseEntity<Document> getDocument(@PathVariable final UUID id) {
         logger.debug("Fetching document with id: {}", id);
         if (null == id) {
-            logger.debug("Message Not Processed: No ID");
+            logger.debug("Request Not Processed: No ID");
             return ResponseEntity.badRequest().build();
         }
 
@@ -60,9 +60,6 @@ public class DocumentController {
         if (null == document) {
             return ResponseEntity.notFound().build();
         }
-        document.add(linkTo(methodOn(DocumentController.class).getDocument(document.getId())).withSelfRel());
-        document.add(linkTo(methodOn(DocumentController.class).getAllDocuments()).withRel("all documents"));
-        document.add(linkTo(methodOn(DocumentController.class).getDocumentKeys()).withRel("all keys"));
 
         return ResponseEntity.ok(document);
     }
@@ -74,46 +71,7 @@ public class DocumentController {
             return ResponseEntity.badRequest().build();
         }
 
-        UUID documentId = manager.addDocument(document.getId(), document.getContent());
-
-        document.add(linkTo(methodOn(DocumentController.class).getDocument(document.getId())).withSelfRel());
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .location(linkTo(methodOn(DocumentController.class).getDocument(documentId)).withSelfRel().toUri())
-                .body(document);
-    }
-
-    @PostMapping("/{id}")
-    public ResponseEntity<Document> addDocument(@PathVariable final UUID id,
-                                                @RequestBody final String content) {
-        logger.debug("Posting new document.");
-        if (null == content) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        UUID documentId = manager.addDocument(id, content);
-
-        Document document = new Document(id, content);
-        document.add(linkTo(methodOn(DocumentController.class).getDocument(document.getId())).withSelfRel());
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .location(linkTo(methodOn(DocumentController.class).getDocument(documentId)).withSelfRel().toUri())
-                .body(document);
-    }
-
-    @PostMapping("/create")
-    public ResponseEntity<Document> addDocument(@RequestBody final String content) {
-        logger.debug("Posting new document.");
-        if (null == content) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        UUID documentId = manager.addDocument(content);
-
-        Document document = new Document(documentId, content);
-        document.add(linkTo(methodOn(DocumentController.class).getDocument(document.getId())).withSelfRel());
+        UUID documentId = manager.addDocument(document);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -132,7 +90,6 @@ public class DocumentController {
 
         return ResponseEntity
                 .accepted()
-                .location(linkTo(methodOn(DocumentController.class).getDocument(removedId)).withSelfRel().toUri())
                 .build();
     }
 

@@ -16,10 +16,7 @@ public interface DocumentManager {
     List<Document> getAllDocuments();
 
     @Nonnull
-    UUID addDocument(@Nonnull String content);
-
-    @Nonnull
-    UUID addDocument(@Nonnull UUID key, @Nonnull String content);
+    UUID addDocument(@Nonnull Document document);
 
     @Nullable
     Document getDocument(@Nonnull UUID key);

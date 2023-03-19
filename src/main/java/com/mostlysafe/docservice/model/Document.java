@@ -18,26 +18,12 @@ import org.springframework.hateoas.RepresentationModel;
 @NoArgsConstructor
 @AllArgsConstructor
 @org.springframework.data.mongodb.core.mapping.Document
-public class Document extends RepresentationModel<Document> {
+public class Document {
 
     @Id
     private UUID id;
     private String content;
-
-
-//    @JsonCreator
-//    public Document(@Nonnull @JsonProperty("id") final UUID id,
-//                    @Nonnull @JsonProperty("content") final String content){
-//        this.id = id;
-//        this.content = content;
-//    }
-//
-//    public UUID getId() {
-//        return id;
-//    }
-//
-//    public String getContent() {
-//        return content;
-//    }
+    private String type;
+    private String contentHash;
 
 }

@@ -40,15 +40,9 @@ public class DocumentManagerMongo implements DocumentManager {
 
     @Nonnull
     @Override
-    public UUID addDocument(@Nonnull final String content) {
-        return this.addDocument(UUID.randomUUID(), content);
-    }
-
-    @Nonnull
-    @Override
-    public UUID addDocument(@Nonnull final UUID key, @Nonnull final String content) {
-        documentRepository.save(new Document(key, content));
-        return key;
+    public UUID addDocument(Document document) {
+        Document doc = documentRepository.save(document);
+        return doc.getId();
     }
 
     @Nullable

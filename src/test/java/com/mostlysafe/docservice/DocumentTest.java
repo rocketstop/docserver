@@ -22,7 +22,7 @@ public class DocumentTest {
     public void test_getters () {
         UUID one = UUID.randomUUID();
         String content = "test content";
-        Document document = new Document(one, content);
+        Document document = new Document(one, content, null, null);
 
         assertThat(document.getId(), is(one));
         assertThat(document.getContent(), is(content));
@@ -32,7 +32,7 @@ public class DocumentTest {
     public void testEqual_same() {
         UUID id = UUID.randomUUID();
         String content = "test content";
-        Document one = new Document(id, content);
+        Document one = new Document(id, content, null, null);
 
         assertEquals(one, one);
     }
@@ -41,7 +41,7 @@ public class DocumentTest {
     public void testToString() {
         UUID id = UUID.randomUUID();
         String content = "test content";
-        Document one = new Document(id, content);
+        Document one = new Document(id, content, null, null);
         String expected = "Document{id="+id+" : content="+ content+"}";
 
         String output = one.toString();
@@ -54,8 +54,8 @@ public class DocumentTest {
     public void testEqual() {
         UUID id = UUID.randomUUID();
         String content = "test content";
-        Document one = new Document(id, content);
-        Document two = new Document(id, content);
+        Document one = new Document(id, content, null, null);
+        Document two = new Document(id, content, null, null);
 
         assertEquals(one, two);
     }
@@ -65,8 +65,8 @@ public class DocumentTest {
         UUID id = UUID.randomUUID();
         UUID id2 = UUID.randomUUID();
         String content = "test content";
-        Document one = new Document(id, content);
-        Document two = new Document(id2, content);
+        Document one = new Document(id, content, null, null);
+        Document two = new Document(id2, content, null, null);
 
         assertNotEquals(one, two);
     }
@@ -76,8 +76,8 @@ public class DocumentTest {
         UUID id = UUID.randomUUID();
         String content = "test content";
         String content2 = "more test content";
-        Document one = new Document(id, content);
-        Document two = new Document(id, content2);
+        Document one = new Document(id, content, null, null);
+        Document two = new Document(id, content2, null, null);
 
         assertNotEquals(one, two);
     }
@@ -86,7 +86,7 @@ public class DocumentTest {
     public void testEqual_differentTypes() {
         UUID id = UUID.randomUUID();
         String content = "test content";
-        Document one = new Document(id, content);
+        Document one = new Document(id, content, null, null);
 
         assertNotEquals(one, "a random thing");
     }
@@ -95,7 +95,7 @@ public class DocumentTest {
     public void testEqual_null() {
         UUID id = UUID.randomUUID();
         String content = "test content";
-        Document one = new Document(id, content);
+        Document one = new Document(id, content, null, null);
 
         assertNotEquals(one, null);
     }
